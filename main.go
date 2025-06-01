@@ -1,6 +1,7 @@
 package main
 
 import (
+	"edr-activity-generator/activity"
 	"flag"
 	"fmt"
 	"log"
@@ -22,4 +23,9 @@ func main() {
 	fmt.Println("Generating EDR test activity...")
 	fmt.Printf("Logs will be written to %s\n", *outputPath)
 
+	err = activity.StartProcess(*outputPath)
+	if err != nil {
+		log.Fatalf("Error generating process activity: %v", err)
+	}
+	fmt.Println("All activities completed successfully")
 }
