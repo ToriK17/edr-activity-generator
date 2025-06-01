@@ -27,5 +27,10 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error generating process activity: %v", err)
 	}
+
+	err = activity.PerformFileActivity(*outputPath)
+	if err != nil {
+		log.Fatalf("Error performing file activity: %v", err)
+	}
 	fmt.Println("All activities completed successfully")
 }
