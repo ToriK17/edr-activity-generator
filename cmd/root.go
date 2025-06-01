@@ -8,7 +8,7 @@ import (
 
 var rootCmd = &cobra.Command{
 	Use:   "edr-activity-generator",
-	Short: "Simulate and log endpoint activity to validate EDR telemetry",
+	Short: "Simulate endpoint activity and write a structured telemetry log",
 	Long: `edr-activity-generator is a CLI tool that triggers realistic endpoint activity 
 		across supported platforms (Linux and macOS) and logs structured telemetry data 
 	to help identify regressions in EDR agent output.
@@ -18,7 +18,9 @@ var rootCmd = &cobra.Command{
 		- File creation, modification, and deletion
 
 	Usage examples:
-	edr-activity-generator run --output logs/activity_log.json
+	./edr-activity-generator run
+	./edr-activity-generator run --output logs/<custom_activity_log>.json
+  ./edr-activity-generator clean
 `,
 }
 
