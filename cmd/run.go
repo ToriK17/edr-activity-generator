@@ -16,6 +16,8 @@ var runCmd = &cobra.Command{
 	Short: "Simulate endpoint activity and write a structured telemetry log",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := os.MkdirAll("logs", os.ModePerm)
+		// https://go.dev/ref/spec#Short_variable_declarations
+		// Redeclaration does not introduce a new var, just assigns a new value to the original.
 		if err != nil {
 			log.Fatalf("Failed to create log directory: %v", err)
 		}
@@ -29,6 +31,10 @@ var runCmd = &cobra.Command{
 
 		if err := activity.PerformFileActivity(outputPath); err != nil {
 			log.Fatalf("Error performing file activity: %v", err)
+		}
+
+		if err := activity.SimulateNetworkActivity(outputPath); err != nil {
+			log.Fatalf("Error performing network activity: %v", err)
 		}
 
 		fmt.Println("All activities completed successfully")
