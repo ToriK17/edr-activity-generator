@@ -37,6 +37,10 @@ var runCmd = &cobra.Command{
 			log.Fatalf("Error performing network activity: %v", err)
 		}
 
+		if err := activity.SimulateHTTP2Activity(outputPath); err != nil {
+			log.Fatalf("Error performing HTTP/2 activity: %v", err)
+		}
+
 		fmt.Println("All activities completed successfully")
 	},
 }

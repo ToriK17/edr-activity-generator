@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net"
+	"net/http"
 	"os"
 	"os/user"
 	"strings"
@@ -44,7 +45,7 @@ func SimulateNetworkActivity(outputPath string) error {
 	}
 
 	logEntry := NetworkLog{
-		Timestamp:   time.Now().Format(time.RFC3339),
+		Timestamp:   time.Now().Format(time.RFC3339), // ensures the timestamp is in ISO 8601, human readable/ machine parsable
 		Username:    currentUser.Username,
 		SourceAddr:  conn.LocalAddr().String(),
 		Destination: conn.RemoteAddr().String(),
@@ -67,6 +68,66 @@ func SimulateNetworkActivity(outputPath string) error {
 		return fmt.Errorf("failed to write network log: %w", err)
 	}
 
-	fmt.Println("Network activity logged.")
+	fmt.Println("HTTP/1.1 Network activity logged.")
+	return nil
+}
+
+func SimulateHTTP2Activity(outputPath string) error {
+	const targetURL = "https://nghttp2.org"
+
+	client := &http.Client{
+		Timeout: 5 * time.Second,
+	}
+
+	req, err := http.NewRequest("HEAD", targetURL, nil)
+	if err != nil {
+		return fmt.Errorf("failed to create HTTP/2 request: %w", err)
+	}
+
+	start := time.Now()
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("failed to perform HTTP/2 request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	elapsed := time.Since(start)
+
+	// Check negotiated protocol
+	connState := resp.TLS
+	protocol := "unknown"
+	if connState != nil && len(connState.NegotiatedProtocol) > 0 {
+		protocol = connState.NegotiatedProtocol
+	}
+
+	currentUser, err := user.Current()
+	if err != nil {
+		return fmt.Errorf("failed to get current user: %w", err)
+	}
+
+	logEntry := NetworkLog{
+		Timestamp:   time.Now().Format(time.RFC3339),
+		Username:    currentUser.Username,
+		SourceAddr:  "-", // http.Client doesn't expose local address details like source IP/port it's abstracted by the transport layer
+		Destination: targetURL,
+		Protocol:    protocol,
+		BytesSent:   0, // tracking sent byte count requires lower-level instrumentation (e.g. httptrace hooks or custom Transport)
+		ProcessName: os.Args[0],
+		CommandLine: strings.Join(os.Args, " "),
+		ProcessID:   os.Getpid(),
+	}
+
+	file, err := os.OpenFile(outputPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return fmt.Errorf("failed to open log file: %w", err)
+	}
+	defer file.Close()
+
+	encoder := json.NewEncoder(file)
+	if err := encoder.Encode(logEntry); err != nil {
+		return fmt.Errorf("failed to write HTTP/2 network log: %w", err)
+	}
+
+	fmt.Printf("HTTP/2 activity logged (%s) in %v\n", protocol, elapsed)
 	return nil
 }
