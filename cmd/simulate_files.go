@@ -19,7 +19,7 @@ var simulateFilesCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Simulating file activity. Output: %s\n", outputPath)
-		if err := activity.PerformFileActivity(outputPath); err != nil {
+		if err := activity.PerformFileActivity(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error simulating file activity: %v", err)
 		}
 	},

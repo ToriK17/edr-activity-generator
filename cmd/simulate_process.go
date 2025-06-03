@@ -19,7 +19,7 @@ var simulateProcessCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Simulating process activity. Output: %s\n", outputPath)
-		if err := activity.StartProcess(outputPath); err != nil {
+		if err := activity.StartProcess(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error simulating process activity: %v", err)
 		}
 	},

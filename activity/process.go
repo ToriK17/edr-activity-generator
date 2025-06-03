@@ -1,7 +1,6 @@
 package activity
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
@@ -18,7 +17,7 @@ type ProcessLog struct {
 	ProcessID   int    `json:"process_id"`
 }
 
-func StartProcess(outputPath string) error {
+func StartProcess(outputPath string, format string) error {
 	// very simple example, cross-platform command (linux and macOS)
 	cmd := exec.Command("sleep", "1")
 
@@ -62,11 +61,10 @@ func StartProcess(outputPath string) error {
 	}
 	defer file.Close()
 
-	// Encode and write JSON log
-	encoder := json.NewEncoder(file)
-	err = encoder.Encode(logEntry)
+	// Encode and write log
+	err = writeLog(logEntry, outputPath, format)
 	if err != nil {
-		return fmt.Errorf("failed to write JSON log: %w", err)
+		return fmt.Errorf("failed to write log: %w", err)
 	}
 
 	fmt.Println("Process activity successfully logged.")

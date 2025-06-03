@@ -1,7 +1,6 @@
 package activity
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"os/user"
@@ -20,7 +19,7 @@ type FileLog struct {
 	ProcessID   int    `json:"process_id"`
 }
 
-func PerformFileActivity(outputPath string) error {
+func PerformFileActivity(outputPath, format string) error {
 	filePath := "test_output.txt"
 	fullPath, _ := filepath.Abs(filePath)
 
@@ -44,14 +43,7 @@ func PerformFileActivity(outputPath string) error {
 			ProcessID:   processID,
 		}
 
-		file, err := os.OpenFile(outputPath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			return fmt.Errorf("failed to open log file: %w", err)
-		}
-		defer file.Close()
-
-		encoder := json.NewEncoder(file)
-		return encoder.Encode(logEntry)
+		return writeLog(logEntry, outputPath, format)
 	}
 
 	// Create a file

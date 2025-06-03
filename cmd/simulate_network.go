@@ -19,10 +19,10 @@ var simulateNetworkCmd = &cobra.Command{
 		}
 
 		fmt.Printf("Simulating network activity. Output: %s\n", outputPath)
-		if err := activity.SimulateNetworkActivity(outputPath); err != nil {
+		if err := activity.SimulateNetworkActivity(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error simulating network HTTP/1.1 activity: %v", err)
 		}
-		if err := activity.SimulateHTTP2Activity(outputPath); err != nil {
+		if err := activity.SimulateHTTP2Activity(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error simulating HTTP/2 activity: %v", err)
 		}
 	},

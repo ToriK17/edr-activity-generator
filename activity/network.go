@@ -1,7 +1,6 @@
 package activity
 
 import (
-	"encoding/json"
 	"fmt"
 	"net"
 	"net/http"
@@ -23,7 +22,7 @@ type NetworkLog struct {
 	ProcessID   int    `json:"process_id"`
 }
 
-func SimulateNetworkActivity(outputPath string) error {
+func SimulateNetworkActivity(outputPath string, format string) error {
 	const defaultTarget = "example.com:80"
 
 	conn, err := net.Dial("tcp", defaultTarget)
@@ -63,8 +62,8 @@ func SimulateNetworkActivity(outputPath string) error {
 	}
 	defer file.Close()
 
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(logEntry); err != nil {
+	err = writeLog(logEntry, outputPath, format)
+	if err != nil {
 		return fmt.Errorf("failed to write network log: %w", err)
 	}
 
@@ -72,7 +71,7 @@ func SimulateNetworkActivity(outputPath string) error {
 	return nil
 }
 
-func SimulateHTTP2Activity(outputPath string) error {
+func SimulateHTTP2Activity(outputPath string, format string) error {
 	const targetURL = "https://nghttp2.org"
 
 	client := &http.Client{
@@ -123,8 +122,8 @@ func SimulateHTTP2Activity(outputPath string) error {
 	}
 	defer file.Close()
 
-	encoder := json.NewEncoder(file)
-	if err := encoder.Encode(logEntry); err != nil {
+	err = writeLog(logEntry, outputPath, format)
+	if err != nil {
 		return fmt.Errorf("failed to write HTTP/2 network log: %w", err)
 	}
 

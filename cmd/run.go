@@ -25,19 +25,19 @@ var runCmd = &cobra.Command{
 		fmt.Println("Generating EDR test activity...")
 		fmt.Printf("Logs will be written to %s\n", outputPath)
 
-		if err := activity.StartProcess(outputPath); err != nil {
+		if err := activity.StartProcess(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error generating process activity: %v", err)
 		}
 
-		if err := activity.PerformFileActivity(outputPath); err != nil {
+		if err := activity.PerformFileActivity(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error performing file activity: %v", err)
 		}
 
-		if err := activity.SimulateNetworkActivity(outputPath); err != nil {
+		if err := activity.SimulateNetworkActivity(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error performing network activity: %v", err)
 		}
 
-		if err := activity.SimulateHTTP2Activity(outputPath); err != nil {
+		if err := activity.SimulateHTTP2Activity(outputPath, outputFormat); err != nil {
 			log.Fatalf("Error performing HTTP/2 activity: %v", err)
 		}
 

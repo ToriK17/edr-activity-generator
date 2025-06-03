@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var outputFormat string
+
 var rootCmd = &cobra.Command{
 	Use:   "edr-activity-generator",
 	Short: "Simulate endpoint activity and write a structured telemetry log",
@@ -34,6 +36,6 @@ func Execute() {
 }
 
 func init() {
-	// No global flags needed yet.
-	// rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Add to root as PersistentFlags vs Flags so it applies to all subcommands
+	rootCmd.PersistentFlags().StringVarP(&outputFormat, "format", "f", "json", "Log format: json, csv, or yaml")
 }
