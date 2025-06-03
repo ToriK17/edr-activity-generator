@@ -6,7 +6,7 @@ This tool generates real endpoint activity across supported platforms (macOS and
 
 ## Why Go?
 
-Although I’m more experienced in Ruby, I chose to build this tool in Go because it aligns with Red Canary’s internal stack and offers robust cross-platform support with strong system-level access. This project has been a great opportunity to sharpen my Go skills and demonstrate my ability to learn and adapt quickly in service of a real-world use case.
+Although I’m more experienced in Ruby, I chose to build this tool in Go due to its excellent cross-platform support and strong capabilities for system-level programming, which are crucial for this kind of project. This endeavor has been a great opportunity to sharpen my Go skills and demonstrate my ability to learn and adapt quickly in service of a real-world use case.
 
 ## Key Features
 
