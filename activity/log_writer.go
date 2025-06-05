@@ -33,7 +33,17 @@ func logWriter(entry any, outputPath, format string) error {
 		writer := csv.NewWriter(file)
 		defer writer.Flush()
 
-		// For now, support a very basic CSV with `map[string]string` only
+		// If the file is empty, write a header row first.
+		if fi, _ := file.Stat(); fi.Size() == 0 {
+			header, err := toCSVHeader(entry)
+			if err != nil {
+				return err
+			}
+			if err := writer.Write(header); err != nil {
+				return err
+			}
+		}
+
 		record, err := toCSVRecord(entry)
 		if err != nil {
 			return err

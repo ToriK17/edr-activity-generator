@@ -8,6 +8,25 @@ import (
 )
 
 // Quick & simple CSV serialization assuming flat structs with string/int fields
+func toCSVHeader(entry interface{}) ([]string, error) {
+	val := reflect.ValueOf(entry)
+	if val.Kind() != reflect.Struct {
+		return nil, errors.New("CSV format only supported for struct types")
+	}
+
+	typ := val.Type()
+	var header []string
+	for i := 0; i < typ.NumField(); i++ {
+		f := typ.Field(i)
+		name := f.Tag.Get("json")
+		if name == "" || name == "-" {
+			name = f.Name
+		}
+		header = append(header, name)
+	}
+	return header, nil
+}
+
 func toCSVRecord(entry interface{}) ([]string, error) {
 	val := reflect.ValueOf(entry)
 	if val.Kind() != reflect.Struct {
