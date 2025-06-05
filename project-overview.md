@@ -1,4 +1,4 @@
-# edr-activity-generator – Project Summary
+# EDR Activity Generator — Project Overview
 
 This project implements a cross-platform command-line tool designed to simulate realistic endpoint activity and generate structured telemetry logs. The purpose is to help validate that updated EDR (Endpoint Detection and Response) agents continue to capture key behavioral data consistently and accurately to prevent potential regressions.
 
