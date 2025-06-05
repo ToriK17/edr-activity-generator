@@ -62,7 +62,7 @@ func SimulateNetworkActivity(outputPath string, format string) error {
 	}
 	defer file.Close()
 
-	err = writeLog(logEntry, outputPath, format)
+	err = logWriter(logEntry, outputPath, format)
 	if err != nil {
 		return fmt.Errorf("failed to write network log: %w", err)
 	}
@@ -122,7 +122,7 @@ func SimulateHTTP2Activity(outputPath string, format string) error {
 	}
 	defer file.Close()
 
-	err = writeLog(logEntry, outputPath, format)
+	err = logWriter(logEntry, outputPath, format)
 	if err != nil {
 		return fmt.Errorf("failed to write HTTP/2 network log: %w", err)
 	}

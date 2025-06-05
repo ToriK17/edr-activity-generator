@@ -62,7 +62,7 @@ func StartProcess(outputPath string, format string) error {
 	defer file.Close()
 
 	// Encode and write log
-	err = writeLog(logEntry, outputPath, format)
+	err = logWriter(logEntry, outputPath, format)
 	if err != nil {
 		return fmt.Errorf("failed to write log: %w", err)
 	}

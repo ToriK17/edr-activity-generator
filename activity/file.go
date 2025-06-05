@@ -43,7 +43,7 @@ func PerformFileActivity(outputPath, format string) error {
 			ProcessID:   processID,
 		}
 
-		return writeLog(logEntry, outputPath, format)
+		return logWriter(logEntry, outputPath, format)
 	}
 
 	// Create a file
