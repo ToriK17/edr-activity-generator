@@ -24,7 +24,7 @@ func logWriter(entry any, outputPath, format string) error {
 	case "yaml":
 		// add a YAML doc separator if the file is not empty
 		if fi, _ := file.Stat(); fi.Size() != 0 {
-			if _, err := file.WriteString("\n---\n"); err != nil {
+			if _, err := file.WriteString("---\n"); err != nil {
 				return err
 			}
 		}
@@ -37,7 +37,7 @@ func logWriter(entry any, outputPath, format string) error {
 		if _, err := file.Write(data); err != nil {
 			return err
 		}
-		_, err = file.WriteString("\n") // final newline
+
 		return err
 
 	case "csv":
