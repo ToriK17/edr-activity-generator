@@ -1,45 +1,86 @@
-# EDR Activity Generator — Project Overview
+# EDR Activity Generator — README
+[For a brief one-page project overview](./project_overview.md)
 
 ## Purpose
 
-This tool generates real endpoint activity across supported platforms (macOS and Linux in this implementation) to help detect regressions in telemetry emitted by Endpoint Detection and Response (EDR) agents after updates. It provides structured logging of triggered actions to support correlation with what the EDR agent records.
+This tool is a cross-platform command-line tool that simulates realistic endpoint activity (processes, files, and network traffic) and produces structured telemetry logs. It's designed to help validate the accuracy of telemetry collected by Endpoint Detection and Response (EDR) agents, especially after updates—to catch regressions before they impact production.
 
 ## Why Go?
 
-Although I’m more experienced in Ruby, I chose to build this tool in Go due to its excellent cross-platform support and strong capabilities for system-level programming, which are crucial for this kind of project. This endeavor has been a great opportunity to sharpen my Go skills and demonstrate my ability to learn and adapt quickly in service of a real-world use case.
+Although my background is primarily in Ruby, I chose Go for its excellent cross-platform capabilities, native system-level libraries, and ability to compile static binaries. This project provided a valuable opportunity to deepen my Go experience while solving a practical, low-level problem in a performance-conscious language.
 
 ## Key Features
 
-- **Cross-platform support:** macOS and Linux currently tested.
-- **Modular CLI built with Cobra:** Includes subcommands for `run` and `clean`, with room for expansion.
-- **Activity simulation includes:**
-  - Process creation (`sleep 1` as a placeholder)
+- **Cross-platform support:** Tested on macOS and Linux.
+- **Flexible output formats:** Supports JSON (default), YAML, and CSV.
+- **Activity types simulated:**
+  - Process creation (`sleep 1`)
   - File creation, modification, and deletion
-- **Structured telemetry log:** Each activity is written as a separate JSON object on its own line:
-  - `timestamp`
-  - `username`
-  - `process_name`
-  - `command_line`
-  - `process_id`
-  - `file_path` and `action` (present for file-related activity only)
+  - Network activity
+    - HTTP/1.1 via raw TCP socket (example.com:80)
+    - HTTP/2 via HTTPS request (https://nghttp2.org)
+- **Structured telemetry output:** One log entry per action, machine-ingestible and human-readable:
 
-## How It Works
+## Usage
 
-### Locally Build the CLI
+### Build
 
 `go build -o edr-activity-generator .`
 
 You can invoke the tool via the CLI using the following subcommands:
 
-### Generate Activity
+### Run All Simulations
 
 `./edr-activity-generator run`
-The above defaults to logs/activity_log.json
+Generates logs in logs/activity_log.json by default.
+
+### Run Individual Simulations
+`./edr-activity-generator simulate process --count 5 --format yaml`
+`./edr-activity-generator simulate files --stream 10s --delay 1s`
+`./edr-activity-generator simulate network --format csv`
+
+### Clean the Log File
+`./edr-activity-generator clean`
+Removes logs/activity_log.json if it exists.
 
 ### Generate Activity and customize the output path
 
 `./edr-activity-generator run --output logs/<custom_activity_log>.json`
 
-### Clean Existing Log File
+## Log Format
 
-`./edr-activity-generator clean`
+Each entry includes relevant telemetry fields depending on the activity type.
+
+### Common Fields
+
+- timestamp (RFC3339)
+- username
+- process_name
+- command_line
+- process_id
+
+### File Activity
+
+- file_path
+- action: one of create, modify, delete
+
+### Network Activity
+
+- source_address
+- destination_address
+- protocol
+- bytes_sent
+
+## Testing
+
+Basic unit tests are included for the log writing and CSV serialization logic (activity/log_writer_test.go). The code is modular and testable, with room for expansion if deeper validation or mocks are needed in the future.
+
+## Container Support
+
+This tool has been tested in:
+- Debian
+- Alpine
+- Fedora
+
+Each has a corresponding Dockerfile under `docker/`. A helper script is available to validate builds across environments:
+`./docker/test-docker-envs.sh`
