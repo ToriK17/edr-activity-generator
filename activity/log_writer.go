@@ -22,11 +22,22 @@ func logWriter(entry any, outputPath, format string) error {
 		return encoder.Encode(entry)
 
 	case "yaml":
+		// add a YAML doc separator if the file is not empty
+		if fi, _ := file.Stat(); fi.Size() != 0 {
+			if _, err := file.WriteString("\n---\n"); err != nil {
+				return err
+			}
+		}
+
 		data, err := yaml.Marshal(entry)
 		if err != nil {
 			return fmt.Errorf("failed to marshal YAML: %w", err)
 		}
-		_, err = file.Write(data)
+		// Write the doc and ensure it ends with a newline
+		if _, err := file.Write(data); err != nil {
+			return err
+		}
+		_, err = file.WriteString("\n") // final newline
 		return err
 
 	case "csv":
