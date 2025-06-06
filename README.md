@@ -1,4 +1,5 @@
 # EDR Activity Generator — README
+
 [For a brief one-page project overview](/project-overview.md)
 
 ## Purpose
@@ -79,6 +80,7 @@ Basic unit tests are included for the log writing and CSV serialization logic (a
 ## Container Support
 
 This tool has been tested in:
+
 - Debian
 - Alpine
 - Fedora
@@ -97,9 +99,9 @@ This project focused on delivering a clear, functioning MVP. That said, I made s
 
 #### Enhanced Realism & Load Simulation
 
-- **Simulated Bursts of Activity:** Allow bursts of activity to better reflect real-world usage spikes (`--high-cpu`, `--stream continuously`).
+- **Simulated Bursts of Activity:** Allow bursts of activity to better reflect real-world usage spikes (`--high-cpu`, `--cstream`).
 - **Concurrent Simulations:** Leverage Go’s goroutines to simulate multiple activity types in parallel, improving realism and testing concurrency.
-- **Forkbomb & High-Load Process Simulation:** Optional stress test flags (clearly marked as dangerous or for controlled environments only).
+- **Stress Testing Modes:** Optional flags to simulate elevated system load for process creation or file operations, clearly labeled and designed for isolated, sandboxed environments only. These would help test how EDR agents behave under pressure, without introducing real system risk.
 
 #### Logging Architecture
 
