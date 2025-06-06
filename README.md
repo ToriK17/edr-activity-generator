@@ -23,27 +23,27 @@ Although my background is primarily in Ruby, I chose Go for its excellent cross-
 
 ## Usage
 
-### Build
+#### Build
 
 `go build -o edr-activity-generator .`
 
 You can invoke the tool via the CLI using the following subcommands:
 
-### Run All Simulations
+#### Run All Simulations
 
 `./edr-activity-generator run`
 Generates logs in logs/activity_log.json by default.
 
-### Run Individual Simulations
+#### Run Individual Simulations
 `./edr-activity-generator simulate process --count 5 --format yaml`
 `./edr-activity-generator simulate files --stream 10s --delay 1s`
 `./edr-activity-generator simulate network --format csv`
 
-### Clean the Log File
+#### Clean the Log File
 `./edr-activity-generator clean`
 Removes logs/activity_log.json if it exists.
 
-### Generate Activity and customize the output path
+#### Generate Activity and customize the output path
 
 `./edr-activity-generator run --output logs/<custom_activity_log>.json`
 
@@ -51,7 +51,7 @@ Removes logs/activity_log.json if it exists.
 
 Each entry includes relevant telemetry fields depending on the activity type.
 
-### Common Fields
+#### Common Fields
 
 - timestamp (RFC3339)
 - username
@@ -59,12 +59,12 @@ Each entry includes relevant telemetry fields depending on the activity type.
 - command_line
 - process_id
 
-### File Activity
+#### File Activity
 
 - file_path
 - action: one of create, modify, delete
 
-### Network Activity
+#### Network Activity
 
 - source_address
 - destination_address
@@ -84,3 +84,51 @@ This tool has been tested in:
 
 Each has a corresponding Dockerfile under `docker/`. A helper script is available to validate builds across environments:
 `./docker/test-docker-envs.sh`
+
+## Potential Future Improvements
+
+This project focused on delivering a clear, functioning MVP. That said, I made several intentional scope decisions with an eye toward future extensibility. Here are the planned enhancements if time was not a factor.
+
+#### Platform Support & Portability
+
+- **Windows Support:** Extend compatibility to Windows systems with proper API handling (e.g., via syscall or cross-platform abstractions).
+- **Platform Detection:** Automatically adapt behavior using runtime.GOOS and annotate log entries with platform metadata.
+
+#### Enhanced Realism & Load Simulation
+
+- **Simulated Bursts of Activity:** Allow bursts of activity to better reflect real-world usage spikes (`--high-cpu`, `--stream continuously`).
+- **Concurrent Simulations:** Leverage Go’s goroutines to simulate multiple activity types in parallel, improving realism and testing concurrency.
+- **Forkbomb & High-Load Process Simulation:** Optional stress test flags (clearly marked as dangerous or for controlled environments only).
+
+#### Logging Architecture
+
+- **Centralized, Non-Blocking Logging:** Use channels to implement a dedicated logging goroutine for thread-safe, performant output handling.
+- **Expanded Telemetry Fields:** Include source and destination ports in network activity logs; include GOOS in all entries for platform traceability.
+- **Improved Built-in Formatting:** Add human-readable formatting options (e.g., pretty-print JSON) to avoid reliance on external tools like jq.
+
+#### Testability & CI Integration
+
+- **Comprehensive Test Coverage:** Expand testins to include tests for each simulation type.
+- **Optional CI Pipeline Integration:** Design the tool to run in a CI job and validate agent output consistency post-deploy.
+
+#### Telemetry Validation & Regression Detection
+
+- **Agent Log Comparison Tooling:** Build optional validators to compare generated activity with agent-emitted telemetry (out of scope for this demo, but aligned with long-term goals).
+
+- **Failure Alerts:** Optional flags to mark missing or malformed telemetry if paired with EDR logs, enabling early detection of regression bugs.
+
+## Additional Feature Considerations
+
+If this tool is used to validate agent behavior post-update, these improvements may also help:
+
+- **Custom Activity Profiles:** Load activity instructions from a config file (YAML/JSON) to simulate varied test scenarios across runs.
+
+- **Timestamp Jitter/Delay Injection:** Simulate real-world delays in logging or activity to test how EDR agents handle imperfect timing.
+
+- **Replay Mode:** Save & re-run exact sequences of generated activity to help reproduce regressions from real test cases.
+
+- **Telemetry Schema Validator:** Lightweight JSON schema checks to flag missing or incorrect fields in generated logs, useful during pipeline validation.
+
+## Scope Prioritization
+
+Several advanced features (Windows support, EDR validation logic) were deferred to focus on delivering a clear and reviewable MVP. Each planned feature reflects either specific feedback or practical considerations for future-proofing the tool.
