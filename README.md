@@ -1,5 +1,5 @@
 # EDR Activity Generator — README
-[For a brief one-page project overview](./project_overview.md)
+[For a brief one-page project overview](/project-overview.md)
 
 ## Purpose
 
