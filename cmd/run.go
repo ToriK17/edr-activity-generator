@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
@@ -15,11 +16,12 @@ var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Simulate endpoint activity and write a structured telemetry log",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := os.MkdirAll("logs", os.ModePerm)
-		// https://go.dev/ref/spec#Short_variable_declarations
-		// Redeclaration does not introduce a new var, just assigns a new value to the original.
+		outputDir := filepath.Dir(outputPath)
+		err := os.MkdirAll(outputDir, 0755)
+		// higher permissions needed here to enter custom paths and access files located inside.
+
 		if err != nil {
-			log.Fatalf("Failed to create log directory: %v", err)
+			log.Fatalf("Failed to create log directory %q: %v", outputDir, err)
 		}
 
 		fmt.Println("Generating EDR test activity...")
