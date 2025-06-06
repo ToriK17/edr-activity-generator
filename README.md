@@ -43,9 +43,10 @@ Generates logs in logs/activity_log.json by default.
 `./edr-activity-generator clean`
 Removes logs/activity_log.json if it exists.
 
-#### Generate Activity and customize the output path
+#### Generate Activity and customize the output path & directories
 
-`./edr-activity-generator run --output logs/<custom_activity_log>.json`
+`./edr-activity-generator run --output logs/custom_activity_log.json`
+` ./edr-activity-generator run --output new_place/my_custom_logs.json`
 
 ## Log Format
 
