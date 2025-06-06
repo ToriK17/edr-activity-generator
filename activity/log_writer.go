@@ -38,7 +38,7 @@ func logWriter(entry any, outputPath, format string) error {
 			return err
 		}
 
-		return err
+		return nil // Explicitly return nil to removes any ambiguity about which err variable you're returning
 
 	case "csv":
 		writer := csv.NewWriter(file)
