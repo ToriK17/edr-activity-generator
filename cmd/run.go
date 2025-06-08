@@ -19,6 +19,10 @@ var runCmd = &cobra.Command{
 		outputDir := filepath.Dir(outputPath)
 		err := os.MkdirAll(outputDir, 0755)
 		// higher permissions needed here to enter custom paths and access files located inside.
+		cmdArgs := args
+		if len(cmdArgs) == 0 {
+			cmdArgs = []string{"sleep", "1"}
+		}
 
 		if err != nil {
 			log.Fatalf("Failed to create log directory %q: %v", outputDir, err)
@@ -27,7 +31,7 @@ var runCmd = &cobra.Command{
 		fmt.Println("Generating EDR test activity...")
 		fmt.Printf("Logs will be written to %s\n", outputPath)
 
-		if err := activity.StartProcess(outputPath, outputFormat); err != nil {
+		if err := activity.StartProcess(outputPath, outputFormat, cmdArgs); err != nil {
 			log.Fatalf("Error generating process activity: %v", err)
 		}
 

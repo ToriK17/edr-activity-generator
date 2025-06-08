@@ -14,6 +14,12 @@ var simulateProcessCmd = &cobra.Command{
 	Use:   "process",
 	Short: "Simulate process creation",
 	Run: func(cmd *cobra.Command, args []string) {
+		cmdArgs := args
+		if len(cmdArgs) == 0 {
+			fmt.Println("No command provided, defaulting to: sleep 1")
+			cmdArgs = []string{"sleep", "1"}
+		}
+
 		err := os.MkdirAll("logs", os.ModePerm)
 		if err != nil {
 			log.Fatalf("Failed to create log directory: %v", err)
@@ -33,7 +39,7 @@ var simulateProcessCmd = &cobra.Command{
 			}
 
 			fmt.Printf("Simulating process activity. Output: %s\n", outputPath)
-			if err := activity.StartProcess(outputPath, outputFormat); err != nil {
+			if err := activity.StartProcess(outputPath, outputFormat, cmdArgs); err != nil {
 				log.Fatalf("Error simulating process activity: %v", err)
 			}
 

@@ -17,9 +17,12 @@ type ProcessLog struct {
 	ProcessID   int    `json:"process_id"`
 }
 
-func StartProcess(outputPath string, format string) error {
-	// very simple example, cross-platform command (linux and macOS)
-	cmd := exec.Command("sleep", "1")
+func StartProcess(outputPath string, format string, cmdArgs []string) error {
+	// Tested with simple sleep 1 example, cross-platform command (linux and macOS)
+	if len(cmdArgs) == 0 {
+		return fmt.Errorf("no command provided")
+	}
+	cmd := exec.Command(cmdArgs[0], cmdArgs[1:]...)
 
 	// Start the process
 	err := cmd.Start()
