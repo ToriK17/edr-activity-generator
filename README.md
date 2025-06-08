@@ -100,7 +100,6 @@ The following commands are known to work on both macOS and most Linux distributi
 - `./edr-activity-generator simulate process uptime` — Reports how long the system has been running.
 - `./edr-activity-generator simulate process hostname` — Shows system's hostname.
 - `./edr-activity-generator simulate process true` — Exits successfully recording true.
-- `./edr-activity-generator simulate process false` — Exits with an error code (no output).
 - `./edr-activity-generator simulate process /bin/sh -c 'echo from shell'` — Simulates a shell-spawned process, useful for testing shell-based execution patterns.
 
 #### Platform Support & Portability
