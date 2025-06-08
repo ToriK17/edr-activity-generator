@@ -6,7 +6,7 @@ This project implements a cross-platform command-line tool designed to simulate 
 
 ### The tool simulates the following endpoint activities:
 
-- Process creation (sleep 1)
+- Process creation (custom executable and arguments, default: sleep 1)
 - File operations: creation, modification, and deletion
 - Network activity: Basic HTTP/1.1 traffic via raw TCP socket & HTTP/2 traffic via HTTPS requests to nghttp2.org
 
@@ -29,6 +29,7 @@ The tool is built using Cobra for a modular, extensible CLI interface.
 ***Run individual types:***
 
 - `./edr-activity-generator simulate process --count 5 --format yaml`
+- `./edr-activity-generator simulate process --count 5 --format yaml /bin/echo hello world`
 
 ***Stream activities over time:***
 
