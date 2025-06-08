@@ -7,8 +7,7 @@ COPY . .
 
 # Build the binary
 # RUN go build -o edr-activity-generator .
-RUN CGO_ENABLED=0 go build -o edr-activity-generator .
+RUN chmod +x docker/full-test.sh && \
+    CGO_ENABLED=0 go build -o edr-activity-generator .
 
-
-# Default run command
-CMD ["./edr-activity-generator", "run"]
+CMD ["./docker/full-test.sh"]
