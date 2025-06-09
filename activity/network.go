@@ -44,7 +44,7 @@ func SimulateNetworkActivity(outputPath string, format string) error {
 	}
 
 	logEntry := NetworkLog{
-		Timestamp:   time.Now().Format(time.RFC3339), // ensures the timestamp is in ISO 8601, human readable/ machine parsable
+		Timestamp:   time.Now().Format(time.RFC3339),
 		Username:    currentUser.Username,
 		SourceAddr:  conn.LocalAddr().String(),
 		Destination: conn.RemoteAddr().String(),

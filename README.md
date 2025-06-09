@@ -56,7 +56,7 @@ Each entry includes relevant telemetry fields depending on the activity type.
 
 #### Common Fields
 
-- timestamp (RFC3339)
+- timestamp (RFC3339) This nsures the timestamp is in ISO 8601, human readable/ machine parsable
 - username
 - process_name
 - command_line
